@@ -93,6 +93,14 @@ save_plot("04_happiness_by_health", function() {
   legend("topleft", legend = c("Europe", "France"), col = c(EU_COL, FR_COL), lwd = 2, bty = "n")
 }, width = 1000, height = 750)
 
+health_country <- sort(tapply(df2$health, df2$cntry, mean))
+save_plot("03b_health_by_country", function() {
+  barplot(health_country, las = 2, ylim = c(0, 5),
+          col = ifelse(names(health_country) == "FR", FR_COL, "grey75"),
+          xlab = "Country", ylab = "Mean subjective health (1-5)",
+          main = "Mean subjective health by country (France in red)")
+})
+
 save_plot("04b_happiness_by_health_boxplot_FR", function() {
   boxplot(happy ~ health, data = df2[df2$cntry == "FR", ], col = FR_COL,
           xlab = "Subjective health (1 = very bad, 5 = very good)",
@@ -123,6 +131,14 @@ edu_table <- t(sapply(c(France = "FR", Spain = "ES", UK = "GB", Germany = "DE", 
   }))
 cat("\nYears of education by country (weighted)\n")
 print(edu_table)
+
+# Years of education by education level (ISCED-based ESS code edulvlb)
+years_by_level <- tapply(df3$eduyrs, df3$edulvlb, mean)
+save_plot("05b_years_by_education_level", function() {
+  barplot(years_by_level, las = 2, col = "grey60",
+          xlab = "", ylab = "Mean years of education",
+          main = "Years of education by education level (ESS code edulvlb)")
+}, width = 1400, height = 800)
 
 happy_edu_EU  <- tapply(df3$happy,  df3$eduyrs, mean)
 health_edu_EU <- tapply(df3$health, df3$eduyrs, mean)
